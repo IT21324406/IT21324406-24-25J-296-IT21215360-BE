@@ -8,7 +8,7 @@ services:
       source $HOME/.cargo/env
       python -m pip install --upgrade pip setuptools wheel
       pip install -r requirements.txt
-    startCommand: gunicorn app:app --workers 1 --threads 2 --timeout 120
+    startCommand: gunicorn --bind 0.0.0.0:$PORT --workers 1 --threads 2 --timeout 120 --max-requests 1000 --max-requests-jitter 50 app:app
     envVars:
       - key: PYTHON_VERSION
         value: 3.10.0
@@ -17,4 +17,6 @@ services:
       - key: TF_FORCE_GPU_ALLOW_GROWTH
         value: "true"
       - key: TF_MEMORY_ALLOCATION
-        value: "512" 
+        value: "512"
+      - key: PORT
+        value: "10000" 
