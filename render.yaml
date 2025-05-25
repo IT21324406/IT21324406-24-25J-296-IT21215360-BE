@@ -2,12 +2,19 @@ services:
   - type: web
     name: your-app-name
     env: python
+    plan: standard  # This gives more memory
     buildCommand: |
       curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
       source $HOME/.cargo/env
       pip install --upgrade pip
       pip install -r requirements.txt
-    startCommand: python app.py
+    startCommand: gunicorn app:app --workers 1 --threads 2 --timeout 120
     envVars:
       - key: PYTHON_VERSION
-        value: 3.11.0 
+        value: 3.11.0
+      - key: TF_CPP_MIN_LOG_LEVEL
+        value: "2"
+      - key: TF_FORCE_GPU_ALLOW_GROWTH
+        value: "true"
+      - key: TF_MEMORY_ALLOCATION
+        value: "512" 
