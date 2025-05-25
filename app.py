@@ -5,6 +5,7 @@ from flask_cors import CORS
 from ai.q_learning import update_q_table, q_table, states, actions
 from ai.probabilistic_model import build_bayesian_network, make_prediction
 from ai.neural_network import predict_ui_adjustments
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -68,4 +69,5 @@ def apply_preferences():
     return jsonify({"message": "Preferences applied successfully.", "preferences": preferences})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 10000))
+    app.run(host='0.0.0.0', port=port, debug=False)
